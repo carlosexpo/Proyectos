@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedido de Pizzas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1 id="estado"></h1>
+    </header>
+    <!-- 
+        -->
+    <div class="sectionText">
+      <h2>¿Quienes somos?</h2>
+      <p>
+        una pizzeria encargada de suministrar comida deliciosa cerca de la famosa cancha de la esquina, por esta
+        pizzeria han pasado grandes estrellas de la nba como lo es kobe ames o lebron brayan
+      </p>
+      <img src="Imagenes/lebron-2.jpg" alt="Imagen lebron" class="sectionImagenDerecha" />
+      <img src="Imagenes/kobe.jpg" alt="Imagen kobe" class="sectionImagenIzquierda" />
+    </div>
+<div class="contenedorPrincipal">
+     <div class="sectionTextRight">
+       <div class="sectionRese">
+         <h2>Reseñas</h2>
+         <ul>
+          <li>Las mejores pizzas del centro, recomendables despues de un partido, te puedes encontrar a los lakers incluso!!!!!!!!! <br><br></li>
+          
+           <li>IMPRESIONANTE, la masa tiene una textura unica y magnifica, ingredientes de alta calidad</li>
+         </ul>
+       </div>
+          <section id="map-section">
+        <h2>📍 Nuestra Ubicación</h2>
+        <p>Carr. México – Pachuca Km. 50 Tizayuca, Hgo., C.P. 43800</p>
+        <div class="map-container">
+           <iframe width="100%" height="400" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d120108.49774885684!2d-99.04883504179692!3d19.8234211!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1924db880b35f%3A0xa8ffcbf68c6999de!2sCECyTEH%20Plantel%20Tizayuca!5e0!3m2!1ses-419!2smx!4v1742764379203!5m2!1ses-419!2smx" 
+    title="Mapa de ubicación de Av. Juárez Nte. 39, El Pedregal, Tizayuca, Hgo.">
+</iframe>
+
+        </div>
+    </section>
+    </div>
+    <form id="formulario" class="formPrincipal">
+      <div class="sectionOrden">
+        <h2>Orden de venta</h2>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="name" required minlength="3" maxlength="15" /><br /><br />
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required min="2025-01-01" max="2026-01-01" /><br /><br />
+      </div>
+
+      <div class="sectionPizzas">
+        <label for="pizza">Selecciona tu pizza:</label>
+        <select id="pizza" required>
+          <option value="Mexicana" data-precio="155">Mexicana - $155 MXN</option>
+          <option value="Pepperoni" data-precio="173">Pepperoni - $173 MXN</option>
+          <option value="Hawaiana" data-precio="220">Hawaiana - $220 MXN</option>
+        </select>
+
+        <label for="cantidadPizza">Cantidad de pizzas:</label>
+        <input type="number" id="cantidadPizza" min="1" value="1" required />
+      </div>
+
+      <div class="sectionComplementos">
+        <h2>Complementos Extras</h2>
+        <label class="checkbox-custom">
+          <input type="checkbox" name="QuesoExt" id="QuesoExt" />
+          <span class="checkmark"></span>
+          Queso Extra ($20) </label
+        ><br />
+        <label class="checkbox-custom">
+          <input type="checkbox" name="refresco" id="refresco" />
+          <span class="checkmark"></span>
+          Refresco ($20) </label
+        ><br />
+        <label class="checkbox-custom">
+          <input type="checkbox" name="OrQueso" id="OrQueso" />
+          <span class="checkmark"></span>
+          Orilla de Queso ($20) </label
+        ><br />
+        <label class="checkbox-custom">
+          <input type="checkbox" name="Papas" id="Papas" />
+          <span class="checkmark"></span>
+          Papas ($20) </label
+        ><br />
+      </div>
+
+      <div class="sectionEntrega">
+        <h2>Método de entrega</h2>
+        <label class="radio-custom">
+          <input type="radio" name="metodo" id="consumoLocal" />
+          <span class="radiomark"></span>
+          Consumo local </label
+        ><br />
+        <label class="radio-custom">
+          <input type="radio" name="metodo" id="envioDomicilio" />
+          <span class="radiomark"></span>
+          Envío a domicilio </label
+        ><br />
+      </div>
+
+      <p id="total"></p>
+      <button onclick="guardarComida()" class="botonSig" type="button">Siguiente</button><br /><br />
+   
+    </form>
+  
+   </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
