@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Libro Azul</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* Reset básico */
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        body {
+            min-height: 100vh;
+        }
+        /* Header */
+        header {
+            background-color: #222;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .logo-left img, .logo-right img {
+            height: 80px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.2rem;
+            padding: 0;
+            margin: 0;
+        }
+        nav ul li {
+            position: relative;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            display: block;
+        }
+        nav ul li a:hover {
+            background-color: #444;
+            border-radius: 4px;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 150px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            border-radius: 4px;
+        }
+        .dropdown-content a {
+            padding: 0.6rem 1rem;
+            color: white;
+            display: block;
+            text-decoration: none;
+        }
+        .dropdown-content a:hover {
+            background-color: #555;
+        }
+        nav ul li.dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Container general */
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto;
+            flex-grow: 1;
+        }
+        /* Secciones */
+        .seccion {
+            display: none;
+        }
+        .seccion.activa {
+            display: block;
+        }
+        /* Carrusel */
+        #image-text-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .image-text-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        .image {
+            flex: 1 1 400px;
+            max-width: 400px;
+            position: relative;
+        }
+        .image img {
+            display: none;
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        .image img.active {
+            display: block;
+        }
+        .text {
+            flex: 1 1 350px;
+            max-width: 350px;
+        }
+        /* Botones carrusel a los lados */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            border: none;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 50%;
+            user-select: none;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        #prevBtn {
+            left: -40px;
+        }
+        #nextBtn {
+            right: -40px;
+        }
+        .carousel-btn:hover {
+            background: rgba(0,0,0,0.7);
+        }
+        /* Mapa */
+        .map-container iframe {
+            width: 100%;
+            height: 350px;
+            border: 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+        /* Boxes en conocenos */
+        #conocenos .box {
+            background-color: #f0f0f0;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1);
+        }
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo-left">
+            <img src="imajenes/logogeneral.jpg" alt="Logo Izquierdo" class="logo-izquierdo" />
+        </div>
+        <nav>
+            <ul>
+               <nav>
+    <ul>
+        <li><a href="#" onclick="mostrarSeccion('inicio')">Inicio</a></li>
+        <li><a href="#" onclick="mostrarSeccion('conocenos')">Conócenos</a></li>
+        <li><a href="#" onclick="mostrarSeccion('servicios')">Servicios</a></li>
+        <li><a href="#" onclick="mostrarSeccion('registrate')">Regístrate</a></li>
+    </ul>
+</nav>
+
+                <li class="dropdown">
+                    <a href="#">Exhibiciones</a>
+                    <div class="dropdown-content">
+                        <a href="#">Nuevas exhibiciones</a>
+                    </div>
+                </li>
+                
+                <li><a href="#" onclick="mostrarSeccion('contacto')">Contáctanos</a></li>
+            </ul>
+        </nav>
+        <div class="logo-right">
+            <img src="imajenes/logogeneral.jpg" alt="Logo Derecho" class="logo-derecho" />
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="inicio" class="seccion activa container">
+        <section id="image-text-section">
+            <button class="carousel-btn" id="prevBtn">&#10094;</button>
+            <div class="image-text-container">
+                <div class="image">
+                    <img id="carousel-image-1" src="imajenes/ford100.jpg" alt="Ford F-100" />
+                    <img id="carousel-image-2" src="imajenes/logogeneral.jpg" alt="Leyendas Clásicas" />
+                    <img id="carousel-image-3" src="imajenes/cadilac.jpg" alt="Cadillac 1955" />
+                    <img id="carousel-image-4" src="imajenes/Porsche.jpg" alt="Porsche 911 1969" />
+                    <img id="carousel-image-5" src="imajenes/beetle.jpg" alt="Volkswagen Beetle" />
+                </div>
+                <div class="text">
+                    <h3 id="carousel-title">INICIO</h3>
+                    <p id="carousel-description">
+                        En Clásico Azul, somos apasionados por la historia, el diseño y el legado automotriz...
+                    </p>
+                </div>
+            </div>
+            <button class="carousel-btn" id="nextBtn">&#10095;</button>
+        </section>
+
+        <section id="map-section" style="margin-top: 2rem;">
+            <h2>📍 Contáctanos 📍</h2>
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19110.89307059445!2d-98.97740136410515!3d19.81652796202807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1924db880b35f%3A0xa8ffcbf68c6999de!2sCECyTEH%20Plantel%20Tizayuca!5e1!3m2!1ses-419!2smx!4v1746715555863!5m2!1ses-419!2smx"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+    </div>
+
+    <!-- OTRAS SECCIONES -->
+    <div id="conocenos" class="seccion container">
+        <section>
+                <div class="image-text-container">
+                <div class="image">
+                    <img id="carousel-image-1" src="imajenes/ford100.jpg" alt="Ford F-100" />
+            <div class="box">
+           
+               <h3>Misión</h3>
+                <p>Nuestra misión es preservar, compartir y celebrar la historia automotriz a través de exhibiciones que inspiran admiración y conocimiento. Buscamos reunir a entusiastas, coleccionistas y nuevas generaciones en un espacio donde el diseño, la innovación y la pasión por los automóviles clásicos y modernos cobren vida, fomentando la cultura automotriz y su legado...</p>
+            </div>
+            <div class="box">
+                <h3>Visión</h3>
+                <p>Ser un referente nacional en la promoción y conservación del patrimonio automotriz, creando experiencias únicas que conecten el pasado, el presente y el futuro del mundo motor, impulsando el valor cultural, educativo y social de los automóviles...</p>
+            </div>
+            <div class="box">
+                <h3>Valores</h3>
+                <p>Valores de la Exposición de Autos...</p>
+
+                 <p>-Pasión: Nos mueve el amor por los autos y su historia.</p>
+
+                 <p>-Respeto: Valoramos el legado automotriz y a quienes lo preservan.</p>
+
+                 <p>-Innovación: Promovemos nuevas ideas sin perder la esencia clásica.</p>
+
+                 <p>-Educación: Fomentamos el aprendizaje sobre el diseño y la evolución del automóvil.</p>
+
+                 <p>-Comunidad: Creamos espacios de encuentro para aficionados, expertos y familias.</p>
+
+            </div>
+        </section>
+    </div>
+
+                <div id="servicios" class="seccion container">
+        <section>
+            <div class="box">
+                <h3>Para expocitores</h3>
+                
+                 <p>-Espacios de exhibición (interior y exterior).</p>
+
+                 <p>-Montaje y logística de vehículos.</p>
+
+                 <p>-Seguridad y vigilancia.</p>
+
+                 <p>-Asistencia técnica y mecánica.</p>
+
+                 <p>-Publicidad y promoción del expositor.</p>
+
+                 <p>-Estaciones de limpieza y detallado de autos.</p>
+
+            </div>
+
+            <div class="box">
+                <h3>Para los vicitantes</h3>
+
+                 <p>-Guías o recorridos temáticos.</p>
+
+                 <p>-Zonas interactivas o de simulación.</p>
+
+                 <p>-Fotografía profesional junto a vehículos.</p>
+
+                 <p>-Puestos de comida y bebida.</p>
+
+                 <p>-Venta de souvenirs y artículos automotrices.</p>
+                  
+                 <p>-Charlas, talleres o conferencias.</p>
+
+                 <p>-Zona infantil o familiar.</p>
+
+                 <p>-Estacionamiento y transporte.</p>
+
+            </div>
+
+            <div class="box">
+                <h3>Generales</h3>
+
+                 <p>-Venta de boletos en línea y en sitio web.</p>
+
+                 <p>-Atención al cliente y puntos de información.</p>
+
+                 <p>-Cobertura en redes sociales y transmisiones en vivo.</p>
+
+                 <p>-Premiaciones o concursos de autos.</p>
+
+            </div>
+        </section>
+    </div>
+
+    <div id="contacto" class="seccion container">
+        <section>
+            <h2>Contacto</h2>
+            <form>
+                <label for="nombre">Nombre:</label><br />
+                <input type="text" id="nombre" name="nombre" /><br /><br />
+                <label for="email">Email:</label><br />
+                <input type="email" id="email" name="email" /><br /><br />
+                <label for="mensaje">Mensaje:</label><br />
+                <textarea id="mensaje" name="mensaje"></textarea><br /><br />
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </div>
+<div id="registrate" class="seccion container">
+  <section>
+    <h2>Formulario de Registro</h2>
+    <form id="registroForm">
+      <label for="nombre">Nombre:</label><br />
+      <input type="text" id="nombre" name="nombre" required /><br /><br />
+
+      <label for="email">Correo electrónico:</label><br />
+      <input type="email" id="email" name="email" required /><br /><br />
+
+      <label for="telefono">Teléfono:</label><br />
+      <input type="tel" id="telefono" name="telefono" required /><br /><br />
+
+      <label for="evento">Evento al que deseas asistir:</label><br />
+      <input type="text" id="evento" name="evento" required /><br /><br />
+
+      <button type="submit">Guardar</button>
+    </form>
+  </section>
+</div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© Exhibiciones clasicias. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const slides = [
+            {
+                imgId: 'carousel-image-2',
+                title: 'Las leyendas clásicas no solo se manejan, se admiran',
+                description: `En cada exhibición, estos vehículos icónicos nos transportan a una época donde el diseño, la ingeniería y el espíritu automotriz alcanzaron su máxima expresión. Son más que autos: son piezas vivas de historia que siguen acelerando corazones.`
+            },
+            {
+                imgId: 'carousel-image-1',
+                title: 'Ford 100',
+                description: `La Ford F-100 es una joya del automovilismo clásico. Con su diseño robusto y motor potente, destaca en cualquier exhibición como símbolo de fuerza, estilo y legado americano.`
+            },
+            {
+                imgId: 'carousel-image-3',
+                title: 'Cadillac 62 Series Coupe DeVille',
+                description: `El Cadillac 62 Series Coupe DeVille 1955 es una obra maestra del diseño automotriz clásico. Con su elegante silueta, detalles cromados y motor V8, brilla en cualquier exhibición como símbolo de lujo, estilo y la grandeza del Cadillac de los años 50.`
+            },
+            {
+                imgId: 'carousel-image-4',
+                title: 'Porsche 911 1969',
+                description: `El Porsche 911 de 1969 brilla en exhibición como un ícono del diseño y la ingeniería alemana. Su silueta clásica y motor bóxer lo convierten en una joya atemporal que sigue cautivando pasiones.`
+            },
+            {
+                imgId: 'carousel-image-5',
+                title: 'Volkswagen Beetle Clásico',
+                description: `El Volkswagen Beetle clásico es sinónimo de historia, simpatía y durabilidad. Con su diseño redondeado y carisma único, sigue siendo un favorito en eventos automotrices.`
+            }
+        ];
+
+        let currentIndex = 0;
+
+        const titleElement = document.getElementById("carousel-title");
+        const descriptionElement = document.getElementById("carousel-description");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+
+        function updateCarousel() {
+            slides.forEach(slide => {
+                document.getElementById(slide.imgId).classList.remove("active");
+            });
+
+            const currentSlide = slides[currentIndex];
+            document.getElementById(currentSlide.imgId).classList.add("active");
+
+            titleElement.textContent = currentSlide.title;
+            descriptionElement.textContent = currentSlide.description;
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        });
+
+        prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+
+        updateCarousel();
+
+        function mostrarSeccion(id) {
+            const secciones = document.querySelectorAll('.seccion');
+            secciones.forEach(sec => {
+                if (sec.id === id) {
+                    sec.classList.add('activa');
+                } else {
+                    sec.classList.remove('activa');
+                }
+            });
+            window.scrollTo(0, 0); // Subir al top al cambiar sección
+        }
+  document.getElementById("registroForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+    const email = document.getElementById("email").value;
+    const telefono = document.getElementById("telefono").value;
+    const evento = document.getElementById("evento").value;
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Registro a Exhibición de Autos", 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Nombre: ${nombre}`, 20, 40);
+    doc.text(`Correo: ${email}`, 20, 50);
+    doc.text(`Teléfono: ${telefono}`, 20, 60);
+    doc.text(`Evento: ${evento}`, 20, 70);
+    doc.text("Gracias por registrarte. ¡Nos vemos en el evento!", 20, 90);
+
+    doc.save(`Registro_${nombre.replace(/\s/g, "_")}.pdf`);
+  });
+    </script>
+   
+</body>
+
+</html>
